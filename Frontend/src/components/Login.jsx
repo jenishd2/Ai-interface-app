@@ -24,11 +24,14 @@ const Login = () => {
       // const userData = JSON.stringify(response.data.user)
       const accessToken = response.data.data.accessToken
       const userData = response.data.data.user
+      const status = true
       // console.log(user)
       // console.log(accessToken)
       if(accessToken){
         localStorage.setItem("accessToken",accessToken)
-        dispatch(login({accessToken,userData}))
+        localStorage.setItem("status",true)
+        localStorage.setItem("auth",JSON.stringify(userData))
+        dispatch(login({accessToken,userData,status}))
         navigate('/'); // Navigate to the home page
         reset();
       }else{

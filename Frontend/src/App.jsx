@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import Chat from "./components/Chat";
+import { Header, Menu ,Chat} from "../src/components/index";
 export default function App() {
- return (
-    <Chat />
+  return (
+    <div className="w-full h-[100vh] relative">
+      <Header />
+      <Menu />
+      <Chat />
+    </div>
   );
 }

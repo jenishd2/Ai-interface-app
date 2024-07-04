@@ -5,7 +5,7 @@ import { logout } from '../store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 export default function Logout({classname}) {
-  const accessToken = useSelector((state)=>state.auth.accessToken)
+  const accessToken = localStorage.getItem("accessToken")
   // console.log(accessToken)
   const dispatch = useDispatch()
   const navigate =  useNavigate()
@@ -15,11 +15,14 @@ export default function Logout({classname}) {
          {
            accessToken:accessToken
          })
-       console.log(response)
-       dispatch(logout())
+      //  console.log(response)
+      const status = false
+      navigate("/login")
+       dispatch(logout(status))
        localStorage.removeItem("accessToken")
-       localStorage.setItem("authentication",false)
-       navigate("/login")
+       localStorage.setItem("status",false)
+       localStorage.removeItem("auth")
+      //  localStorage.setItem("authentication",false)
      } catch (error) {
       console.log(error.message)
      }
