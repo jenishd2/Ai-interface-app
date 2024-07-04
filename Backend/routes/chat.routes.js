@@ -4,6 +4,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.route("/data").post(verifyJWT,Createchat)
+router.route("/data").post(Createchat)
 
 export default router
