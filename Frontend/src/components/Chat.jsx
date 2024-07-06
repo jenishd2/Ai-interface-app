@@ -7,31 +7,30 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { FiSend } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import "../App.css";
+import { Header, Menu } from "./index.js";
 
 export default function Chat() {
   const { register, handleSubmit, reset } = useForm();
   const [chatHistory, setChatHistory] = useState([]); // Updated state to store chat history
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const [selectedChat, setSelectedChat] = useState(null);
+  const navigate = useNavigate();
   // const accessToken = useSelector((state)=>state.auth.accessToken)
-  const userData = JSON.parse(localStorage.getItem("auth"))
-  
-
+  const userData = JSON.parse(localStorage.getItem("auth"));
 
   const submit = async (data) => {
     const query = data.Query;
-    const email = userData.email
+    const email = userData.email;
     // console.log(email)
     setLoading(true);
 
     try {
       const response = await axios.post("http://localhost:8000/api/v1/data", {
         query,
-        email
+        email,
       });
       const answer = response.data;
-
       // Update chat history
       setChatHistory((prevHistory) => [...prevHistory, { query, answer }]);
       setLoading(false);
@@ -46,13 +45,47 @@ export default function Chat() {
     }
   };
 
+  const handleSelectChat = async (chatId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/chats/${chatId}`
+      );
+      setSelectedChat(response.data);
+      // console.log(response.data)
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching chat details:", error);
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-[100%] h-full mx-auto relative overflow-y-scroll overflow-x-hidden ">
-      
-      {/* <h1>{user}</h1> */}
+    <div className="w-[83%] h-[100%] ml-auto  overflow-y-scroll overflow-x-hidden ">
+      <Menu onSelectChat={handleSelectChat} />
+
+      {selectedChat ? (
+        <div className="h-[90vh]">
+          <div className="chat chat-end">
+            <div className="chat-bubble chat-bubble-primary text-xl">
+              {selectedChat.query}
+            </div>
+          </div>
+          <MarkdownRenderer
+            content={selectedChat.response}
+            classname="text-lg m-1 w-[70%] left-[8%]  chat-bubble chat-bubble-black overflow-x-scroll text-white"
+          />
+        </ div>
+      ) : (
+        <>
+          <div className="h-[90vh]">
+            
+          </div>
+        </>
+      )}
       {/* Render chat history */}
       {chatHistory.map((chat, index) => (
-        <div key={index} className="m-4 w-full">
+        <div key={index} className="w-full ">
           <div className="chat chat-end">
             <div className="chat-bubble chat-bubble-primary text-xl">
               {chat.query}
@@ -66,7 +99,7 @@ export default function Chat() {
             ) : (
               <MarkdownRenderer
                 content={chat.answer}
-                classname="text-lg m-1 w-[70%]  left-[20%]  chat-bubble chat-bubble-black text-white"
+                classname="text-lg m-1 w-[70%] left-[8%]  chat-bubble chat-bubble-black overflow-x-scroll text-white"
               />
             )}
           </div>
@@ -75,12 +108,13 @@ export default function Chat() {
 
       <form
         onSubmit={handleSubmit(submit)}
-        className="flex items-center justify-center sticky bottom-0 w-[80%] left-[15%] gap-3"
+        className="flex items-center justify-center sticky bottom-0 w-[86%] left-[10%] gap-3"
       >
         <textarea
           className="textarea textarea-bordered w-[80%] text-lg"
           placeholder="Enter Your Query"
           {...register("Query", { required: true })}
+          rows={1}
         ></textarea>
         <button className="btn btn-primary bottom-0 w-[10%] text-xl">
           Send <FiSend />

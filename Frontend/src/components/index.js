@@ -5,6 +5,8 @@ import Header from "./Header"
 import Logout from "./Logout"
 import Menu from "./Menu"
 import Chat from "./Chat"
+import Home from "./Home"
+import HistoryTitle from "./HistoryTitle"
 export {
     Input,
     Button,
@@ -12,5 +14,7 @@ export {
     Header,
     Menu,
     Chat,
-    Logout
+    Home,
+    Logout,
+    HistoryTitle
 }
