@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import MarkdownRenderer from "./Markdown.jsx";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { FiSend } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import { Header, Menu } from "./index.js";
+import { Menu ,Skeleton} from "./index.js";
 
 export default function Chat() {
   const { register, handleSubmit, reset } = useForm();
   const [chatHistory, setChatHistory] = useState([]); // Updated state to store chat history
   const [loading, setLoading] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const navigate = useNavigate();
   // const accessToken = useSelector((state)=>state.auth.accessToken)
   const userData = JSON.parse(localStorage.getItem("auth"));
@@ -52,6 +51,7 @@ export default function Chat() {
         `http://localhost:8000/api/v1/chats/${chatId}`
       );
       setSelectedChat(response.data);
+      setChatHistory([]);
       // console.log(response.data)
       setLoading(false);
     } catch (error) {
@@ -60,12 +60,28 @@ export default function Chat() {
     }
   };
 
+  const EmptyChat = () => {
+    setSelectedChat(null);
+    setChatHistory([]);
+  };
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
+
   return (
-    <div className="w-[83%] h-[100%] ml-auto  overflow-y-scroll overflow-x-hidden ">
-      <Menu onSelectChat={handleSelectChat} />
+    <div
+      className={`${
+        isSidebarVisible ? "w-[83%]" : "w-full"
+      } h-[100%] ml-auto overflow-hidden overflow-y-scroll`}
+    >
+      <Menu
+        onSelectChat={handleSelectChat}
+        onEmpty={EmptyChat}
+        toggleSidebar={toggleSidebar}
+      />
 
       {selectedChat ? (
-        <div className="h-[90vh]">
+        <div className="h-[86vh] overflow-scroll ">
           <div className="chat chat-end">
             <div className="chat-bubble chat-bubble-primary text-xl">
               {selectedChat.query}
@@ -73,19 +89,20 @@ export default function Chat() {
           </div>
           <MarkdownRenderer
             content={selectedChat.response}
-            classname="text-lg m-1 w-[70%] left-[8%]  chat-bubble chat-bubble-black overflow-x-scroll text-white"
+            classname="text-lg m-1 w-[70%] left-[8%]  chat-bubble chat-bubble-black text-white"
           />
-        </ div>
+        </div>
       ) : (
         <>
-          <div className="h-[90vh]">
-            
+          <div className={`${(chatHistory.length ==0)?"h-[86vh]":"hidden"} flex justify-center items-center`}>
+          {/* <Skeleton /> */}
+            <h1 className="text-4xl">Welcome To Website</h1>
           </div>
         </>
       )}
       {/* Render chat history */}
       {chatHistory.map((chat, index) => (
-        <div key={index} className="w-full ">
+        <div key={index} className="w-full">
           <div className="chat chat-end">
             <div className="chat-bubble chat-bubble-primary text-xl">
               {chat.query}
@@ -93,9 +110,7 @@ export default function Chat() {
           </div>
           <div className="chat chat-start">
             {loading && index === chatHistory.length - 1 ? (
-              <SkeletonTheme baseColor="#202020" highlightColor="#444">
-                <Skeleton count={10} className="w-[70%] left-[20%] m-1" />
-              </SkeletonTheme>
+              <Skeleton />
             ) : (
               <MarkdownRenderer
                 content={chat.answer}
@@ -108,7 +123,7 @@ export default function Chat() {
 
       <form
         onSubmit={handleSubmit(submit)}
-        className="flex items-center justify-center sticky bottom-0 w-[86%] left-[10%] gap-3"
+        className="flex items-center justify-center sticky bottom-0 w-[90%] left-[10%] gap-3"
       >
         <textarea
           className="textarea textarea-bordered w-[80%] text-lg"

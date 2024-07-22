@@ -46,6 +46,7 @@ const registerUser = asyncHandler(async (req,res)=>{
     )
     
 })
+
 const getusers = asyncHandler(async(req,res)=>{
     const users = await User.find().select("-password -refreshToken "); // Exclude passwords
     if (!users) {

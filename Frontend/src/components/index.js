@@ -7,6 +7,7 @@ import Menu from "./Menu"
 import Chat from "./Chat"
 import Home from "./Home"
 import HistoryTitle from "./HistoryTitle"
+import Skeleton from "./Skeleton"
 export {
     Input,
     Button,
@@ -16,5 +17,6 @@ export {
     Chat,
     Home,
     Logout,
-    HistoryTitle
+    HistoryTitle,
+    Skeleton
 }

@@ -42,6 +42,10 @@ const Login = () => {
       // console.log(response.data); // Assuming response.data is a success message
       // reset()
     } catch (error) {
+      if (error.message == "Request failed with status code 404") {
+        alert("User is Not Registered");
+        return;
+      }
       alert(`Error ${error.message}`);
     }
   };

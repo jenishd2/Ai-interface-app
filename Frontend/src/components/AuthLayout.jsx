@@ -6,7 +6,7 @@ export default function Protected({ children, authentication = true }) {
   const navigate = useNavigate();
   const [Loading, setLoading] = useState(true);
   const authStatus = JSON.parse(localStorage.getItem("status"));
-  
+
   useEffect(() => {
     if (authentication && authStatus !== authentication) {
       navigate("/login");

@@ -2,28 +2,28 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../store/authSlice.js";
-import { useDispatch } from "react-redux";
 
 const Register = () => {
   const { register, handleSubmit, reset } = useForm();
-  const [error,seterror] = useState("")
+  const [error, seterror] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleRegister = async (data) => {
-    seterror("")
+    const email = data.email;
+    const password = data.password;
+    const confirmpassword = data.confirmpassword;
+    seterror("");
     try {
-      if(data.password!=data.confirmpassword){
+      if (password != confirmpassword) {
         seterror("Password is Not Matched");
-        return
+        return;
       }
       const response = await axios.post(
         "http://localhost:8000/api/v1/users/register",
         {
-          email: data.email,
-          password: data.password,
-          confirmpassword:data.confirmpassword
+          email: email,
+          password: password,
+          confirmpassword: confirmpassword,
         }
       );
       alert(response.data.message);
@@ -32,6 +32,10 @@ const Register = () => {
       // console.log(response.data); // Assuming response.data is a success message
       reset();
     } catch (error) {
+      if (error.message == "Request failed with status code 409") {
+        alert("User is Already Exist Please Login");
+        return;
+      }
       alert(`Error: ${error.message}`);
     }
   };
