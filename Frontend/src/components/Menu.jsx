@@ -38,7 +38,7 @@ export default function Menu({ onSelectChat, onEmpty, toggleSidebar }) {
           isVisible ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="h-[60px] bg-black w-full flex justify-between items-center p-3  sticky top-0">
+        <div className="h-[60px] w-full flex justify-between items-center p-3  sticky top-0">
           <BsLayoutSidebar
             className={`text-2xl text-gray-400 cursor-pointer ${
               isVisible ? "relative" : "absolute left-5 top-5"
