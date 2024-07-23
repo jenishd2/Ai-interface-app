@@ -45,7 +45,7 @@ Follow these steps to set up and run the project locally.
 1. **Clone the Repository**
 
     ```bash
-    git clone [https://github.com/jenishd2/Ai-interface-app.git](https://github.com/jenishd2/Ai-interface-app.git)
+    git clone https://github.com/jenishd2/Ai-interface-app.git
     cd Ai-interface-app
     ```
 
