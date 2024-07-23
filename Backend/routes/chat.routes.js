@@ -1,6 +1,6 @@
 import {Router} from "express"
 import { Createchat, getChatDetails, GetChats } from "../controllers/chat.controller.js"
-import { verifyJWT } from "../middlewares/auth.middleware.js"
+
 
 const router = Router()
 

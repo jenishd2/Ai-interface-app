@@ -6,7 +6,6 @@ dotenv.config({
   path:"./env"
 })
 
-// console.log(`${process.env.PORT}`)
 const port = process.env.PORT || 8000;
 
 

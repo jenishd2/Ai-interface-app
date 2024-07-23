@@ -11,7 +11,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async (data) => {
-    // console.log(data);
     try {
       const response = await axios.post(
         "http://localhost:8000/api/v1/users/login",
@@ -21,13 +20,12 @@ const Login = () => {
         },
       );
       alert(response.data.message);
-      // const userData = JSON.stringify(response.data.user)
       const accessToken = response.data.data.accessToken
+      const refreshToken = response.data.data.refreshToken
       const userData = response.data.data.user
       const status = true
-      // console.log(user)
-      // console.log(accessToken)
       if(accessToken){
+        localStorage.setItem("refreshToken",refreshToken)
         localStorage.setItem("accessToken",accessToken)
         localStorage.setItem("status",true)
         localStorage.setItem("auth",JSON.stringify(userData))
@@ -37,13 +35,13 @@ const Login = () => {
       }else{
         console.log("Access Token is Not")
       }
-      // navigate("/");
-      // localStorage.setItem("jwt",accessToken)
-      // console.log(response.data); // Assuming response.data is a success message
-      // reset()
     } catch (error) {
       if (error.message == "Request failed with status code 404") {
         alert("User is Not Registered");
+        return;
+      }
+      if (error.message == "Request failed with status code 401") {
+        alert("Password Is Not Corrected");
         return;
       }
       alert(`Error ${error.message}`);
@@ -89,12 +87,6 @@ const Login = () => {
                   >
                     Password
                   </label>
-                  <Link
-                    to="forget-pass"
-                    className="text-sm text-gray-400 focus:outline-none focus:text-indigo-500 hover:text-indigo-500 dark:hover:text-indigo-300"
-                  >
-                    Forgot password?
-                  </Link>
                 </div>
                 <input
                   type="password"

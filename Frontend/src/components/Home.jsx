@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Menu } from "./index.js";
+import { Header } from "./index.js";
 export default function Home({ children }) {
   return (
     <div className="flex items-center justify-center flex-col w-full ">

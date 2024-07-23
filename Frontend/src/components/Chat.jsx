@@ -4,7 +4,6 @@ import axios from "axios";
 import MarkdownRenderer from "./Markdown.jsx";
 import "react-loading-skeleton/dist/skeleton.css";
 import { FiSend } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { Menu ,Skeleton} from "./index.js";
 
@@ -14,14 +13,13 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const navigate = useNavigate();
+
   // const accessToken = useSelector((state)=>state.auth.accessToken)
   const userData = JSON.parse(localStorage.getItem("auth"));
 
   const submit = async (data) => {
     const query = data.Query;
     const email = userData.email;
-    // console.log(email)
     setLoading(true);
 
     try {
@@ -52,7 +50,6 @@ export default function Chat() {
       );
       setSelectedChat(response.data);
       setChatHistory([]);
-      // console.log(response.data)
       setLoading(false);
     } catch (error) {
       console.error("Error fetching chat details:", error);

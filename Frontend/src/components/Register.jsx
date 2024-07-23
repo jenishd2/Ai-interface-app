@@ -27,9 +27,7 @@ const Register = () => {
         }
       );
       alert(response.data.message);
-      // dispatch(login());
       navigate("/login");
-      // console.log(response.data); // Assuming response.data is a success message
       reset();
     } catch (error) {
       if (error.message == "Request failed with status code 409") {

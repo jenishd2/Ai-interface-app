@@ -2,11 +2,11 @@ import React from 'react'
 import {Button} from './index'
 import axios from 'axios'
 import { logout } from '../store/authSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 export default function Logout({classname}) {
   const accessToken = localStorage.getItem("accessToken")
-  // console.log(accessToken)
+  const refreshToken = localStorage.getItem("refreshtoken")
   const dispatch = useDispatch()
   const navigate =  useNavigate()
   const Handlelogout = async()=>{
@@ -15,15 +15,19 @@ export default function Logout({classname}) {
          {
            accessToken:accessToken
          })
-      //  console.log(response)
       const status = false
       navigate("/login")
        dispatch(logout(status))
        localStorage.removeItem("accessToken")
+       localStorage.removeItem("refreshToken")
        localStorage.setItem("status",false)
        localStorage.removeItem("auth")
-      //  localStorage.setItem("authentication",false)
      } catch (error) {
+      if(error.message == "Request failed with status code 401"){
+        await axios.post("http://localhost:8000/api/v1/users/refresh-token",{
+          refreshToken:refreshToken
+        })
+      }
       console.log(error.message)
      }
   }
